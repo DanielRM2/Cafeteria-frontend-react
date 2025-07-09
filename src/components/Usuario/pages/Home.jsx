@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import WhatsAppButton from '../componentes/BotonWhatsApp.jsx';
+import WhatsAppButton from '../components/BotonWhatsApp.jsx';
 import "../css/General.css";
 import "../css/Home.css";
 import { fetchData } from "../utils/fetchData.js";

@@ -1,7 +1,7 @@
 import "../css/General.css";
 import "../css/Nosotros.css";
 import React from "react";
-import WhatsAppButton from "../componentes/BotonWhatsApp.jsx";
+import WhatsAppButton from "../components/BotonWhatsApp.jsx";
 
 export default function Nosotros() {
 
