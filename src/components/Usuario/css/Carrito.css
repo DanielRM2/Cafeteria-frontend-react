@@ -1,0 +1,187 @@
+/* Contenedor flex para las dos tablas */
+.carrito-layout {
+    display: flex;
+    gap: 40px; /* espacio entre tablas */
+    align-items: flex-start; /* alinear arriba */
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+/* Tabla carrito ocupa más espacio */
+.tabla-carrito {
+    flex: 6.5;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    border: 1px solid #d2d2d2;
+}
+
+/* Nueva tabla para total */
+.tabla-total {
+    flex: 3.5;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    border: 1px solid #d2d2d2;
+    padding: 20px;
+    height: fit-content; /* que no se estire */
+    background-color: #f9f9f9;
+}
+
+/* Celdas tabla total */
+.tabla-total td {
+    padding: 20px 30px;
+    text-align: right;
+    font-weight: bold;
+    border: none;
+    color: #3b3b3b;
+}
+
+/* Opcional: un poco de estilo para el label Total */
+.tabla-total td:first-child {
+    text-align: left;
+    font-weight: normal;
+    color: #555;
+}
+
+
+
+.tabla-carrito {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    border: 1px solid #d2d2d2;
+}
+
+.tabla-carrito thead {
+    background-color: #f5f5f5;
+}
+
+.tabla-carrito th,
+.tabla-carrito td {
+    padding: 14px 12px 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla-carrito th {
+    text-transform: uppercase;
+    color: #3b3b3b;
+    font-weight: bold;
+
+}
+
+.tabla-carrito tbody tr:hover {
+    background-color: #fafafa;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.tabla-carrito input[type="number"] {
+    width: 60px;
+    padding: 6px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    color: black;
+    background-color: #fff;
+}
+
+.tabla-carrito input[type="number"]:focus {
+    outline: none;
+    appearance: auto;
+}
+
+
+.boton-eliminar {
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.boton-eliminar:hover {
+    background-color: white;
+    border: 1px solid #949494;
+}
+
+.tabla-carrito tfoot td {
+    text-align: right;
+    font-size: 18px;
+    padding-top: 20px;
+    font-weight: bold;
+    border: none;
+}
+.producto-info {
+    display: flex;
+    align-items: center;
+    text-align: justify;
+    gap: 2rem;
+}
+
+.producto-imagen-carrito {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.producto-detalle-carrito {
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-detalle-carrito p {
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+
+.tabla-total td.td-comprar {
+    text-align: center !important;
+    padding-top: 20px;
+}
+
+.td-comprar .btn-comprar {
+    background-color: black;
+    margin-top: 1rem;
+    color: white;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.td-comprar .btn-comprar:hover {
+    background-color: #f9ff00;
+    color: black;
+}
+
+
+@media (max-width: 1160px) {
+    .carrito-layout {
+        flex-direction: column; /* Apila las tablas una encima de otra */
+    }
+
+    .tabla-carrito,
+    .tabla-total {
+        width: 100%;
+    }
+
+    .tabla-total {
+        margin-top: 2rem;
+    }
+}

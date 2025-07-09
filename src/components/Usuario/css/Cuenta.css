@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.boton-animado {
+    position: relative;
+    overflow: hidden;
+}
+
+.boton-animado::before {
+    content: "";
+    position: absolute;
+    background-color: #22c55e; /* verde-500 */
+    transition: transform 0.37s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .boton-animado::before {
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        transform: scaleX(0);
+        transform-origin: top;
+    }
+
+    .boton-animado.activa::before {
+        transform: scaleX(1);
+    }
+}
+
+@media (max-width: 767px) {
+    .boton-animado::before {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        transform: scaleY(0);
+        transform-origin: left;
+    }
+
+    .boton-animado.activa::before {
+        transform: scaleY(1);
+    }
+}
