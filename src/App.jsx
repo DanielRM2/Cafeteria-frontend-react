@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PrivateRoute from './components/Usuario/components/RutaProtegida.jsx';
-import Spinner from './components/Usuario/components/loading.jsx'; // Importa el spinner
-import Header from './components/Usuario/components/header.jsx';
+import PrivateRoute from './components/Usuario/componentes/RutaProtegida.jsx';
+import Spinner from './components/Usuario/componentes/loading.jsx'; // Importa el spinner
+import Header from './components/Usuario/componentes/header.jsx';
 
 const Home = lazy(() => import('./components/Usuario/pages/Home.jsx'));
 const Menu = lazy(() => import('./components/Usuario/pages/Menu.jsx'));

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useSesionCliente } from "../hooks/useSesionCliente.js";
-import Perfil from "../components/perfil.jsx";
-import Direcciones from "../components/Direcciones.jsx";
-import Pedidos from "../components/Pedidos.jsx";
+import Perfil from "../componentes/perfil.jsx";
+import Direcciones from "../componentes/Direcciones.jsx";
+import Pedidos from "../componentes/Pedidos.jsx";
 import "../css/Cuenta.css";
 
 export default function Cuenta() {
