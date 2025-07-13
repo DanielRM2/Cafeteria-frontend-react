@@ -5,9 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    allowedHosts: ['urbancoffee.loca.lt'],
+    host: true,
+    allowedHosts: ['urbancoffee.loca.lt']
   },
   build: {
-    outDir: 'dist', // Asegúrate que esta sea la carpeta subida
+    outDir: 'dist',
   }
 });
