@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSesionCliente } from "../hooks/useSesionCliente.js";
+import { fetchDataSimple, putDataSimple, deleteDataSimple } from "../utils/api.js";
 
 export default function Perfil() {
     const { cliente, cerrarSesion } = useSesionCliente();
@@ -10,14 +11,22 @@ export default function Perfil() {
     const [mostrarModal, setMostrarModal] = useState(false);
 
     useEffect(() => {
-        if (cliente) {
-            setPerfil(cliente);
-            setForm({
-                nombreCompleto: cliente.nombreCompleto || "",
-                correo: cliente.correo || "",
-                telefono: cliente.telefono || "",
-                contrasena: ""
-            });
+        if (cliente?.id) {
+            // Obtener el cliente completo desde la API
+            fetchDataSimple(`/api/cliente/${cliente.id}`)
+                .then(data => {
+                    setPerfil(data);
+                    setForm({
+                        nombreCompleto: data.nombreCompleto || "",
+                        correo: data.correo || "",
+                        telefono: data.telefono || "",
+                        contrasena: ""
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener el perfil:', error);
+                    setMensaje('Error al cargar el perfil');
+                });
         }
     }, [cliente]);
 
@@ -69,18 +78,7 @@ export default function Perfil() {
             const body = { ...form };
             if (!body.contrasena) delete body.contrasena;
 
-            const res = await fetch(`http://localhost:8080/api/cliente/${perfil.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error || "Error al actualizar perfil.");
-            }
-
-            const actualizado = await res.json();
+            const actualizado = await putDataSimple(`/api/cliente/${perfil.id}`, body);
             setPerfil(actualizado);
             setEditando(false);
             setMensaje({ tipo: "exito", texto: "Perfil actualizado correctamente." });
@@ -91,14 +89,11 @@ export default function Perfil() {
 
     const handleEliminar = async () => {
         try {
-            const res = await fetch(`http://localhost:8080/api/cliente/${perfil.id}`, {
-                method: "DELETE"
-            });
-            if (!res.ok) throw new Error("Error al eliminar cuenta");
+            await deleteDataSimple(`/api/cliente/${perfil.id}`);
             cerrarSesion();
             window.location.href = "/login";
-        } catch {
-            setMensaje({ tipo: "error", texto: "Hubo un error al eliminar la cuenta." });
+        } catch (error) {
+            setMensaje({ tipo: "error", texto: error.message || "Hubo un error al eliminar la cuenta." });
         }
     };
 

@@ -4,9 +4,10 @@ import WhatsAppButton from '../components/BotonWhatsApp.jsx';
 import "../css/General.css";
 import "../css/Home.css";
 import { fetchData } from "../utils/fetchData.js";
+import { URL } from "../utils/api.js";
 
 
-const apiData = fetchData("http://localhost:8080/api/productos/listar-populares");
+const apiData = fetchData("/api/productos/listar-populares");
 
 
 export default function Home() {
@@ -30,9 +31,9 @@ export default function Home() {
                                 {data?.map((producto, index) => (
                                     <div className="product-card1" key={index}>
                                         <img
-                                            src={`/images/${producto.imagen}`}
-                                            className="product-image"
+                                            src={`${URL}/uploads/${producto.imagen}`}
                                             alt={producto.nombre}
+                                            className="product-image"
                                         />
                                         <h2>{producto.nombre}</h2>
                                         <p>{producto.descripcion}</p>
@@ -40,10 +41,10 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="product-button">
-                                <Link to="/menu" className="view-more-button">Ver más productos</Link>
-                            </div>
-                    </section>
+                    <div className="product-button">
+                        <Link to="/menu" className="view-more-button">Ver más productos</Link>
+                    </div>
+                </section>
             </main>
 
             <div className="fondo">

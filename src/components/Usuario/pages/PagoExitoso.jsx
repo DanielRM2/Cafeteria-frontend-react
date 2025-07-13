@@ -1,48 +1,70 @@
 import React, { useEffect, useState } from "react";
+import { fetchDataSimple } from "../utils/api.js";
+import Spinner from "../components/loading.jsx"; // ajusta la ruta si es necesario
 
 const PagoExitoso = () => {
     const [pedido, setPedido] = useState(null);
     const [estado, setEstado] = useState("");
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const preferenceId = params.get("preference_id");
+
         if (!preferenceId) {
             setError("No se encontró el preference_id en la URL.");
             setLoading(false);
             return;
         }
-        fetch(`http://localhost:8080/api/pagos/preferencia/${preferenceId}/pedido`)
-            .then(res => {
-                if (!res.ok) throw new Error();
-                return res.json();
-            })
-            .then(data => {
+
+        let intervalo;
+
+        const obtenerEstado = async () => {
+            try {
+                const data = await fetchDataSimple(`/api/pagos/preferencia/${preferenceId}/pedido`);
                 setPedido(data);
                 setEstado(data.estado);
-            })
-            .catch(() => setError("No se pudo obtener el estado del pedido."))
-            .finally(() => setLoading(false));
+
+                if (data.estado === "CONFIRMADO") {
+                    clearInterval(intervalo);
+                    setLoading(false);
+                }
+            } catch (e) {
+                setError("No se pudo obtener el estado del pedido.");
+                clearInterval(intervalo);
+                setLoading(false);
+            }
+        };
+
+        obtenerEstado();
+        intervalo = setInterval(obtenerEstado, 5000);
+
+        return () => clearInterval(intervalo);
     }, []);
 
-    if (loading) return <div>Cargando información del pago...</div>;
-    if (error) return <div style={{ color: "red" }}>{error}</div>;
+    if (loading) return <Spinner />;
+    if (error) return <div style={{ color: "red", textAlign: "center", marginTop: "3rem" }}>{error}</div>;
 
     return (
-        <div style={{ maxWidth: 400, margin: "2rem auto", padding: 24, border: "1px solid #eee", borderRadius: 8 }}>
+        <div style={{
+            maxWidth: 400,
+            margin: "2rem auto",
+            padding: 24,
+            border: "1px solid #eee",
+            borderRadius: 8
+        }}>
             <h2>Estado de tu pedido</h2>
             <p><b>Estado:</b> {estado}</p>
+
             {pedido && (
                 <div>
                     <p><b>N° Pedido:</b> {pedido.idPedido}</p>
                     <p><b>Total:</b> S/ {pedido.total}</p>
-                    {/* Puedes mostrar más información aquí si lo deseas */}
                 </div>
             )}
-            {estado === "CONFIRMADO" && <p>¡Pago exitoso! Tu pedido está confirmado.</p>}
-            {estado !== "CONFIRMADO" && <p>Tu pago está en proceso o fue rechazado.</p>}
+
+            <p>✅ ¡Pago exitoso! Tu pedido está confirmado.</p>
         </div>
     );
 };

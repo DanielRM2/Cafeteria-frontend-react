@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchStock } from '../utils/fetchStock.js';
 
-export function useCarrito() {
+export function useCarrito(notificar) {
     const [carrito, setCarrito] = useState(() => {
         const almacenado = localStorage.getItem("carrito");
         return almacenado ? JSON.parse(almacenado) : [];
@@ -36,13 +36,14 @@ export function useCarrito() {
             const stock = stockMap[producto.idProducto] ?? 99;
             if (existente) {
                 if (existente.cantidad + 1 > stock) {
-                    alert(`Solo hay ${stock} unidades disponibles para este producto.`);
+                    notificar(`Solo hay ${stock} unidades disponibles para este producto.`);
+
                     return prev;
                 }
                 return prev.map(p => p.idProducto === producto.idProducto ? { ...p, cantidad: p.cantidad + 1 } : p);
             }
             if (stock < 1) {
-                alert("Producto sin stock disponible.");
+                notificar("Producto sin stock disponible.");
                 return prev;
             }
             return [...prev, { ...producto, cantidad: 1 }];
@@ -62,7 +63,7 @@ export function useCarrito() {
             return;
         }
         if (cantidad > stock) {
-            alert(`Solo hay ${stock} unidades disponibles para este producto.`);
+            notificar(`Solo hay ${stock} unidades disponibles para este producto.`);
             return;
         }
         setCarrito(prev =>

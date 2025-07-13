@@ -1,3 +1,5 @@
+const BASE_URL = import.meta.env.VITE_API_URL
+
 const getSuspender = (promise) => {
     let status = "pending";
     let response;
@@ -27,8 +29,8 @@ const getSuspender = (promise) => {
     return { read };
 };
 
-export function fetchData(url) {
-    const promise = fetch(url)
+export function fetchData(endpoint) {
+    const promise = fetch(`${BASE_URL}${endpoint}`)
         .then((response) => response.json())
         .then((json) => json);
 

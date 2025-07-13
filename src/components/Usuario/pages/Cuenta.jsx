@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSesionCliente } from "../hooks/useSesionCliente.js";
 import Perfil from "../components/perfil.jsx";
 import Direcciones from "../components/direcciones.jsx";
@@ -7,7 +8,18 @@ import "../css/Cuenta.css";
 
 export default function Cuenta() {
     const { cerrarSesion } = useSesionCliente();
-    const [opcion, setOpcion] = useState("perfil");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tab = searchParams.get("tab") || "perfil";
+    const [opcion, setOpcion] = useState(tab);
+
+    useEffect(() => {
+        setOpcion(tab); // Si cambia la URL, actualizar pestaña activa
+    }, [tab]);
+
+    const cambiarOpcion = (nueva) => {
+        setOpcion(nueva);
+        setSearchParams({ tab: nueva });
+    };
 
     const renderContenido = () => {
         switch (opcion) {
@@ -26,16 +38,15 @@ export default function Cuenta() {
             {/* Sidebar */}
             <aside className="md:w-1/4 w-full bg-white shadow md:rounded-l-lg p-0 md:p-4 border-r">
                 <nav className="flex md:flex-col flex-row">
-
                     {/* Mi perfil */}
                     <div className={`boton-animado ${opcion === "perfil" ? "activa" : ""}`}>
                         <button
-                            className={`w-full text-left px-4 py-3 transition
-                                ${opcion === "perfil"
-                                ? "bg-green-200 font-bold text-green-900"
-                                : "text-gray-700 hover:bg-green-100"
+                            className={`w-full text-left px-4 py-3 transition ${
+                                opcion === "perfil"
+                                    ? "bg-green-200 font-bold text-green-900"
+                                    : "text-gray-700 hover:bg-green-100"
                             }`}
-                            onClick={() => setOpcion("perfil")}
+                            onClick={() => cambiarOpcion("perfil")}
                         >
                             👤 Mi perfil
                         </button>
@@ -44,12 +55,12 @@ export default function Cuenta() {
                     {/* Mis direcciones */}
                     <div className={`boton-animado ${opcion === "direcciones" ? "activa" : ""}`}>
                         <button
-                            className={`w-full text-left px-4 py-3 transition
-                                ${opcion === "direcciones"
-                                ? "bg-green-200 font-bold text-green-900"
-                                : "text-gray-700 hover:bg-green-100"
+                            className={`w-full text-left px-4 py-3 transition ${
+                                opcion === "direcciones"
+                                    ? "bg-green-200 font-bold text-green-900"
+                                    : "text-gray-700 hover:bg-green-100"
                             }`}
-                            onClick={() => setOpcion("direcciones")}
+                            onClick={() => cambiarOpcion("direcciones")}
                         >
                             🏠 Mis direcciones
                         </button>
@@ -58,12 +69,12 @@ export default function Cuenta() {
                     {/* Mis pedidos */}
                     <div className={`boton-animado ${opcion === "pedidos" ? "activa" : ""}`}>
                         <button
-                            className={`w-full text-left px-4 py-3 transition
-                                ${opcion === "pedidos"
-                                ? "bg-green-200 font-bold text-green-900"
-                                : "text-gray-700 hover:bg-green-100"
+                            className={`w-full text-left px-4 py-3 transition ${
+                                opcion === "pedidos"
+                                    ? "bg-green-200 font-bold text-green-900"
+                                    : "text-gray-700 hover:bg-green-100"
                             }`}
-                            onClick={() => setOpcion("pedidos")}
+                            onClick={() => cambiarOpcion("pedidos")}
                         >
                             🛒 Mis pedidos
                         </button>

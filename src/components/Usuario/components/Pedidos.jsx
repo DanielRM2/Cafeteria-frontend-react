@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useSesionCliente } from "../hooks/useSesionCliente.js";
+import { fetchDataSimple } from "../utils/api.js";
+import SpinnerInterno from "./loadingInterno.jsx";
 
 export default function Pedidos() {
     const { cliente } = useSesionCliente();
     const [pedidos, setPedidos] = useState([]);
     const [mensaje, setMensaje] = useState("");
     const [pedidoActivo, setPedidoActivo] = useState(null);
+    const [cargando, setCargando] = useState(false);
 
     useEffect(() => {
         if (cliente?.id) {
-            fetch(`http://localhost:8080/api/pedidos/cliente/${cliente.id}`)
-                .then(res => res.json())
-                .then(data => setPedidos(data))
-                .catch(() => setMensaje("Error al cargar pedidos"));
+            setCargando(true);
+            fetchDataSimple(`/api/pedidos/cliente/${cliente.id}`)
+                .then(setPedidos)
+                .catch(() => setMensaje("Error al cargar pedidos"))
+                .finally(() => setCargando(false));
         }
     }, [cliente]);
 
@@ -23,65 +27,80 @@ export default function Pedidos() {
         }
     }, [mensaje]);
 
+    useEffect(() => {
+        const cerrarModal = e => {
+            if (e.key === "Escape") setPedidoActivo(null);
+        };
+        if (pedidoActivo) {
+            window.addEventListener("keydown", cerrarModal);
+        }
+        return () => window.removeEventListener("keydown", cerrarModal);
+    }, [pedidoActivo]);
+
     return (
         <div>
             <h3 className="text-2xl font-bold mb-4">Mis Pedidos</h3>
 
             {mensaje && (
-                <div className="mb-4 px-4 py-2 bg-red-100 text-red-800 border border-red-300 rounded transition-all duration-300">
+                <div className="mb-4 px-4 py-2 bg-red-100 text-red-800 border border-red-300 rounded">
                     {mensaje}
                 </div>
             )}
 
-            {/* Tabla de pedidos principal */}
-            <div className="w-full overflow-x-auto">
-                <table className="min-w-[800px] text-sm bg-white rounded shadow">
-                    <thead>
-                    <tr className="bg-green-100 text-green-900">
-                        <th className="py-2 px-4 text-left"># Pedido</th>
-                        <th className="py-2 px-4 text-left">Fecha Pedido</th>
-                        <th className="py-2 px-4 text-left">Estado</th>
-                        <th className="py-2 px-4 text-left">Método Entrega</th>
-                        <th className="py-2 px-4 text-left">Dirección</th>
-                        <th className="py-2 px-4 text-left">Total</th>
-                        <th className="py-2 px-4 text-left">Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {pedidos.length === 0 ? (
-                        <tr>
-                            <td colSpan={7} className="py-4 text-center text-gray-500">
-                                No tienes pedidos registrados.
-                            </td>
+            {cargando ? (
+                <div className="flex justify-center items-center py-10">
+                    <SpinnerInterno />
+                </div>
+            ) : (
+                <div className="w-full overflow-x-auto">
+                    <table className="min-w-[800px] text-sm bg-white rounded shadow">
+                        <thead>
+                        <tr className="bg-green-100 text-green-900">
+                            <th className="py-2 px-4 text-left"># Pedido</th>
+                            <th className="py-2 px-4 text-left">Fecha</th>
+                            <th className="py-2 px-4 text-left">Estado</th>
+                            <th className="py-2 px-4 text-left">Entrega</th>
+                            <th className="py-2 px-4 text-left">Dirección</th>
+                            <th className="py-2 px-4 text-left">Total</th>
+                            <th className="py-2 px-4 text-left">Acciones</th>
                         </tr>
-                    ) : (
-                        pedidos.map(pedido => (
-                            <tr key={pedido.idPedido} className="border-b hover:bg-green-50">
-                                <td className="py-2 px-4">{pedido.idPedido}</td>
-                                <td className="py-2 px-4">{pedido.fechaPedido ? new Date(pedido.fechaPedido).toLocaleString() : "-"}</td>
-                                <td className="py-2 px-4">{pedido.estado}</td>
-                                <td className="py-2 px-4">{pedido.metodoEntrega || "-"}</td>
-                                <td className="py-2 px-4">{pedido.direccion || "-"}</td>
-                                <td className="py-2 px-4">S/ {pedido.total?.toFixed(2) ?? "-"}</td>
-                                <td className="py-2 px-4">
-                                    <button
-                                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-                                        onClick={() => setPedidoActivo(pedido)}
-                                    >
-                                        Ver detalles
-                                    </button>
+                        </thead>
+                        <tbody>
+                        {pedidos.length === 0 ? (
+                            <tr>
+                                <td colSpan={7} className="py-4 text-center text-gray-500">
+                                    No tienes pedidos registrados.
                                 </td>
                             </tr>
-                        ))
-                    )}
-                    </tbody>
-                </table>
-            </div>
+                        ) : (
+                            pedidos.map(pedido => (
+                                <tr key={pedido.idPedido} className="border-b hover:bg-green-50">
+                                    <td className="py-2 px-4">{pedido.idPedido}</td>
+                                    <td className="py-2 px-4">{pedido.fechaPedido ? new Date(pedido.fechaPedido).toLocaleString() : "-"}</td>
+                                    <td className="py-2 px-4">{pedido.estado}</td>
+                                    <td className="py-2 px-4">{pedido.metodoEntrega || "-"}</td>
+                                    <td className="py-2 px-4">{pedido.direccion || "-"}</td>
+                                    <td className="py-2 px-4">S/ {pedido.total?.toFixed(2) ?? "-"}</td>
+                                    <td className="py-2 px-4">
+                                        <button
+                                            className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                                            onClick={() => setPedidoActivo(pedido)}
+                                        >
+                                            Ver detalles
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
             {/* Modal de detalles */}
             {pedidoActivo && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 transition-all">
+                    <div className="bg-white p-6 rounded shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-in">
                         <h4 className="text-xl font-bold mb-2">Detalle del pedido #{pedidoActivo.idPedido}</h4>
                         <div className="mb-2"><b>Estado:</b> {pedidoActivo.estado}</div>
                         <div className="mb-2"><b>Método de entrega:</b> {pedidoActivo.metodoEntrega}</div>
@@ -97,7 +116,7 @@ export default function Pedidos() {
                                 <tr>
                                     <th className="py-1 px-2 text-left">Producto</th>
                                     <th className="py-1 px-2 text-left">Cantidad</th>
-                                    <th className="py-1 px-2 text-left">Precio Unitario</th>
+                                    <th className="py-1 px-2 text-left">Precio</th>
                                     <th className="py-1 px-2 text-left">Subtotal</th>
                                 </tr>
                                 </thead>
@@ -111,9 +130,7 @@ export default function Pedidos() {
                                     </tr>
                                 )) : (
                                     <tr>
-                                        <td colSpan={4} className="py-2 text-center text-gray-500">
-                                            Sin productos
-                                        </td>
+                                        <td colSpan={4} className="py-2 text-center text-gray-500">Sin productos</td>
                                     </tr>
                                 )}
                                 </tbody>

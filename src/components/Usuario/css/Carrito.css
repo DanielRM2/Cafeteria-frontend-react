@@ -1,15 +1,15 @@
 /* Contenedor flex para las dos tablas */
 .carrito-layout {
     display: flex;
-    gap: 40px; /* espacio entre tablas */
+    gap: 20px; /* espacio entre tablas */
     align-items: flex-start; /* alinear arriba */
     padding: 2rem;
     margin-top: 1rem;
 }
 
-/* Tabla carrito ocupa más espacio */
+
 .tabla-carrito {
-    flex: 6.5;
+    flex: 0 0 65%;
     width: 100%;
     border-collapse: collapse;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,43 +17,137 @@
     border: 1px solid #d2d2d2;
 }
 
-/* Nueva tabla para total */
-.tabla-total {
-    flex: 3.5;
+.tabla-resumen {
+    flex: 0 0 35%;
+    width: 100%;
     border-collapse: collapse;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     border: 1px solid #d2d2d2;
-    padding: 20px;
-    height: fit-content; /* que no se estire */
-    background-color: #f9f9f9;
 }
 
-/* Celdas tabla total */
-.tabla-total td {
-    padding: 20px 30px;
-    text-align: right;
-    font-weight: bold;
+.resumen-compra-header {
+    background-color: #2f55c5;
+    color: white;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.resumen-compra-header span:first-child {
+    margin-right: 10px;
+    font-size: 1.3rem;
+}
+
+.resumen-compra-cupon {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    background-color: #f9fafb;
+}
+
+.resumen-compra-cupon span {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.resumen-compra-cupon input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.resumen-compra-cupon input:focus {
+    border-color: #1b32a8;
+}
+
+.resumen-compra-cupon button {
+    background-color: #2f55c5;
+    color: white;
     border: none;
-    color: #3b3b3b;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
 }
 
-/* Opcional: un poco de estilo para el label Total */
-.tabla-total td:first-child {
-    text-align: left;
-    font-weight: normal;
-    color: #555;
+.resumen-compra-cupon button:hover {
+    background-color: #112591;
 }
 
+.resumen-compra-subtotal,
+.resumen-compra-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
 
+.resumen-compra-subtotal td:first-child,
+.resumen-compra-total td:first-child {
+    color: #6b7280;
+}
 
-.tabla-carrito {
+.resumen-compra-total {
+    font-weight: 600;
+    font-size: 1.1rem;
+    background-color: #f9fafb;
+}
+
+.resumen-compra-total td:last-child {
+    color: #132c8a;
+}
+
+.resumen-compra-boton {
+    padding: 15px;
+}
+
+.resumen-compra-boton button {
     width: 100%;
-    border-collapse: collapse;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    border: 1px solid #d2d2d2;
+    padding: 12px;
+    background-color: #1ab964;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
+
+.resumen-compra-boton button:hover {
+    background-color: #0a8045;
+}
+
+.resumen-compra-boton button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.resumen-compra-notas {
+    padding: 15px;
+    font-size: 0.85rem;
+    color: #6b7280;
+    background-color: #f9fafb;
+    line-height: 1.5;
+}
+
+.resumen-compra-notas div {
+    margin-bottom: 8px;
+}
+
+.resumen-compra-notas b {
+    color: #4b5563;
+}
+
 
 .tabla-carrito thead {
     background-color: #f5f5f5;
@@ -183,5 +277,74 @@
 
     .tabla-total {
         margin-top: 2rem;
+    }
+}
+
+@media (max-width: 620px) {
+    .tabla-carrito {
+        border: none;
+    }
+
+    .tabla-carrito th {
+        display: none; /* Oculta encabezado */
+    }
+
+    .tabla-carrito tbody tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 16px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+
+    .tabla-carrito td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: none;
+        font-size: 15px;
+    }
+
+    .tabla-carrito td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #444;
+        flex: 1;
+    }
+
+    .tabla-carrito th:nth-child(1)::before, td:nth-child(1)::before {
+        display: none;
+    }
+
+    .producto-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: right;
+        gap: 10px;
+    }
+
+
+    .producto-imagen-carrito {
+        display: block;
+        margin: auto;
+        width: auto;
+        height: auto;
+        max-height: 40%;
+        max-width: 40%;
+    }
+
+    .producto-detalle-carrito {
+        text-align: left;
+    }
+
+    .tabla-carrito input[type="number"] {
+        width: 50px;
+        padding: 5px;
+        font-size: 14px;
     }
 }

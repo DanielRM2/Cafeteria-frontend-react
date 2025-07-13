@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { postDataSimple } from "../utils/api.js"; // ajusta la ruta según tu estructura
 
 export function useLoginRegistro() {
     const navigate = useNavigate();
@@ -28,28 +29,18 @@ export function useLoginRegistro() {
         e.preventDefault();
         setMensajeLogin('');
         try {
-            const respuesta = await fetch('http://localhost:8080/api/cliente/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    correo: datosLogin.email,
-                    contrasena: datosLogin.password
-                })
+            const data = await postDataSimple("/api/cliente/login", {
+                correo: datosLogin.email,
+                contrasena: datosLogin.password
             });
 
-            if (respuesta.ok) {
-                const data = await respuesta.json();
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("rol", data.rol || "CLIENTE");
-                localStorage.setItem("cliente", JSON.stringify(data.cliente));
-                window.location.href = "/cuenta";
-            } else {
-                const error = await respuesta.json();
-                setMensajeLogin(error.message || 'Credenciales inválidas');
-            }
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("rol", data.rol || "CLIENTE");
+            localStorage.setItem("cliente", JSON.stringify(data.cliente));
+            window.location.href = "/cuenta";
+
         } catch (error) {
-            console.error('Error en login:', error);
-            setMensajeLogin('Error en la conexión al servidor');
+            setMensajeLogin(error.message || 'Credenciales inválidas');
         }
     };
 
@@ -58,39 +49,24 @@ export function useLoginRegistro() {
         setMensajeRegistro('');
         setRegistroExitoso(false);
         try {
-            const respuesta = await fetch('http://localhost:8080/api/cliente/registro', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombreCompleto: datosRegistro.nombreCompleto,
-                    correo: datosRegistro.email,
-                    contrasena: datosRegistro.password,
-                    telefono: datosRegistro.telefono,
-                })
+            const data = await postDataSimple("/api/cliente/registro", {
+                nombreCompleto: datosRegistro.nombreCompleto,
+                correo: datosRegistro.email,
+                contrasena: datosRegistro.password,
+                telefono: datosRegistro.telefono,
             });
 
-            const data = await respuesta.json();
+            setMensajeRegistro("¡Registro exitoso! Ahora puedes iniciar sesión.");
+            setRegistroExitoso(true);
+            setDatosRegistro({ nombreCompleto: '', email: '', password: '', telefono: '' });
 
-            if (respuesta.ok) {
-                setMensajeRegistro("¡Registro exitoso! Ahora puedes iniciar sesión.");
-                setRegistroExitoso(true);
-                setDatosRegistro({ nombreCompleto: '', email: '', password: '', telefono: '' });
-            } else {
-                let errorMsg = "";
-                if (typeof data === "string") {
-                    errorMsg = data;
-                } else {
-                    errorMsg = data.message || "Error al registrarse";
-                }
-                if (errorMsg.includes("correo ya esta registrado")) {
-                    setMensajeRegistro("El correo electrónico ya está registrado. Intenta con otro.");
-                } else {
-                    setMensajeRegistro(errorMsg);
-                }
-            }
         } catch (error) {
-            console.error('Error en registro:', error);
-            setMensajeRegistro('Error en la conexión al servidor');
+            const msg = typeof error === "string" ? error : error.message || "Error al registrarse";
+            if (msg.includes("correo ya esta registrado")) {
+                setMensajeRegistro("El correo electrónico ya está registrado. Intenta con otro.");
+            } else {
+                setMensajeRegistro(msg);
+            }
         }
     };
 
