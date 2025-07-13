@@ -35,7 +35,8 @@ function AppContent() {
                 <Routes>
                     {/* Rutas con layout */}
                     <Route element={<LayoutUsuario />}>
-                        <Route index path="/index" element={<Home />} />
+                        <Route index path="/" />
+                        <Route path="/index" element={<Home />} />
                         <Route path="/menu" element={<Menu />} />
                         <Route path="/nosotros" element={<Nosotros />} />
                         <Route path="/login" element={<Login />} />
