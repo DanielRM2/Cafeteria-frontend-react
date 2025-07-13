@@ -1,1 +1,0 @@
-const o=r=>{let t="pending",e;const s=r.then(n=>{t="success",e=n},n=>{t="error",e=n});return{read:()=>{switch(t){case"pending":throw s;case"error":throw e;default:return e}}}};function a(r){const t=fetch(r).then(e=>e.json()).then(e=>e);return o(t)}export{a as f};
