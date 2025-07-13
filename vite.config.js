@@ -7,4 +7,7 @@ export default defineConfig({
     port: 5173,
     allowedHosts: ['urbancoffee.loca.lt'],
   },
+  build: {
+    outDir: 'dist', // Asegúrate que esta sea la carpeta subida
+  }
 });
