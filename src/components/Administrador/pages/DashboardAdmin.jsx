@@ -106,7 +106,7 @@ export default function PageDashboard() {
     // Efecto para cerrar sesión cuando se selecciona "salir"
     useEffect(() => {
         if (selected === "salir") {
-            localStorage.removeItem("token");
+            localStorage.removeItem("token_staff");
             localStorage.removeItem("rol");
             window.location.href = "/administracion/login";
         }

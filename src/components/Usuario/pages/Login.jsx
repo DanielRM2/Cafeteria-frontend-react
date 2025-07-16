@@ -30,7 +30,7 @@ export default function Login() {
 
     useEffect(() => {
         // Si ya hay sesión activa (token y rol), redirige a /cuenta
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token_cliente');
         const rol = localStorage.getItem('rol');
         if (token && rol === 'CLIENTE') {
             navigate('/cuenta');

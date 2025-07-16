@@ -11,7 +11,7 @@ export default function Login() {
 
     // Redirige si ya hay token
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token_staff");
         if (token) {
             window.location.href = "/administracion/home?dashboard";
         }
@@ -27,7 +27,7 @@ export default function Login() {
                 contrasena
             });
             // Guarda el token y el rol en localStorage o contexto global
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token_staff", data.token);
             localStorage.setItem("rol", data.rol);
             // Redirecciona según el rol o muestra mensaje de éxito
             window.location.href = "/administracion/home";

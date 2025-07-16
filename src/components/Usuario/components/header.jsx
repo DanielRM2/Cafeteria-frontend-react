@@ -1,4 +1,4 @@
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { toggleMenu } from "../utils/funcionToggleHeader.js";
 import { useSesionCliente } from "../hooks/useSesionCliente.js";
 import "../css/General.css";
@@ -12,9 +12,9 @@ export default function Header() {
 
     const NavItem = ({ path, label }) => (
         <li>
-            <Link to={path} className={isActive(path) ? "active" : ""}>
+            <a href={path} className={isActive(path) ? "active" : ""}>
                 {label}
-            </Link>
+            </a>
         </li>
     );
 

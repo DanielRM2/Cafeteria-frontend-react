@@ -17,7 +17,7 @@ export function useSesionCliente() {
 
     const cerrarSesion = () => {
         localStorage.removeItem("cliente");
-        localStorage.removeItem("token");
+        localStorage.removeItem("token_cliente");
         localStorage.removeItem("rol");
         setCliente(null);
     };

@@ -34,7 +34,7 @@ export function useLoginRegistro() {
                 contrasena: datosLogin.password
             });
 
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token_cliente", data.token);
             localStorage.setItem("rol", data.rol || "CLIENTE");
             localStorage.setItem("cliente", JSON.stringify(data.cliente));
             window.location.href = "/cuenta";
