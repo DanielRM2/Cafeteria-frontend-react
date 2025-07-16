@@ -12,7 +12,9 @@ export default function RutaProtegida({ children, rolesPermitidos, redirectTo, t
     const token = tipo === 'staff'
         ? localStorage.getItem('token_staff')
         : localStorage.getItem('token_cliente');
-    const rol = localStorage.getItem('rol');
+    const rol = tipo === 'staff'
+        ? localStorage.getItem('rol_staff')
+        : localStorage.getItem('rol');
     const location = useLocation();
 
     // Si se especifican roles, verifica que el rol esté permitido

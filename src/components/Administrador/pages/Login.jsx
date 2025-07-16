@@ -28,7 +28,7 @@ export default function Login() {
             });
             // Guarda el token y el rol en localStorage o contexto global
             localStorage.setItem("token_staff", data.token);
-            localStorage.setItem("rol", data.rol);
+            localStorage.setItem("rol_staff", data.rol);
             // Redirecciona según el rol o muestra mensaje de éxito
             window.location.href = "/administracion/home";
         } catch (err) {
